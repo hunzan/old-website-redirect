@@ -1,11 +1,9 @@
-# 使用一個輕量級的 Nginx 映像作為基礎
 FROM nginx:alpine
 
-# 將你的 index.html 檔案複製到 Nginx 的預設網站目錄
-COPY index.html /usr/share/nginx/html
+# Railway 預設會給 PORT，先給個 fallback 值
+ENV PORT=8080
 
-# 暴露 80 port
-EXPOSE 80
+# 放 nginx.conf.template 進去，讓 envsubst 轉換 ${PORT}
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
-# 啟動 Nginx 伺服器
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh","-c","envsubst < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]

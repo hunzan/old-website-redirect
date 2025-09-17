@@ -1,0 +1,5 @@
+server {
+  listen       ${PORT};
+  server_name  _;
+  return 301 https://taitobraille.up.railway.app$request_uri;
+}
